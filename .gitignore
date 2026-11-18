@@ -1,0 +1,9 @@
+# Compiled program and build files
+*.exe
+
+# Data created while playing
+savegame.txt
+history.txt
+
+# Editor folders
+.vscode/
