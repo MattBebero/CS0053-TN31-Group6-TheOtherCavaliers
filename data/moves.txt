@@ -1,0 +1,30 @@
+# Owner|Name|Power|Damage type (None/Blunt/Piercing/Mystic)|MP|Cooldown|Learned at level|Target|Effects
+# Target: one, all, adjacent, ally, allies, self
+# Effects (comma separated): poison:N burn:N bleed:N taunt:N shield:N aim focus inspire heal selfheal:N lifesteal:N none
+Swordsman|Slash|6|Blunt|0|0|1|one|none
+Swordsman|Thrust|10|Piercing|1|3|1|one|none
+Swordsman|Taunt|0|None|1|5|1|one|taunt:2,shield:5
+Swordsman|Sweep|8|Blunt|2|5|5|all|none
+Ranger|Shoot|6|Piercing|0|0|1|one|none
+Ranger|Aim|0|None|1|3|1|self|aim
+Ranger|Arrow Rain|8|Piercing|2|5|1|all|none
+Ranger|Coated Snipe|15|Piercing|3|5|5|one|poison:1
+Mage|Water Ball|8|Mystic|0|0|1|one|none
+Mage|Fire Pillar|6|Mystic|1|3|1|one|burn:2
+Mage|Mana Focus|0|None|1|5|1|self|focus
+Mage|Air Twister|10|Mystic|3|5|5|all|none
+Priest|Bonk|6|Blunt|0|0|1|one|none
+Priest|Cure|10|None|1|3|1|ally|heal
+Priest|Inspire|0|None|2|5|1|ally|inspire
+Priest|Heal All|8|None|2|5|5|allies|heal
+Slime|Bounce|3|None|0|0|1|one|none
+Wasp|Sting|5|None|1|5|1|one|poison:1
+Wasp|Attack|4|None|0|0|1|one|none
+Bandit|Knife Throw|6|None|1|5|1|one|bleed:1
+Bandit|Stab|5|None|0|0|1|one|none
+Undead Captain|Bone Sweep|6|None|1|5|1|adjacent|none
+Undead Captain|Bone Bash|12|None|2|5|1|one|none
+Undead Captain|Bone Arm|6|None|0|0|1|one|none
+Werewolf|Blood Thirst|0|None|2|7|1|self|lifesteal:3
+Werewolf|Claw Strike|9|None|0|0|1|one|bleed:1
+Werewolf|Recover|0|None|3|5|1|self|selfheal:15

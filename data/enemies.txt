@@ -1,0 +1,6 @@
+# Name|Type (Solid/Heavy/Spirit)|Base HP|Base level|Speed|Boss (0/1)|Description
+Slime|Spirit|8|1|10|0|A blob.
+Wasp|Solid|11|1|20|0|A nest-invading wasp.
+Bandit|Heavy|21|4|25|0|A wandering caravan thief who attacks merchants and adventurer parties.
+Undead Captain|Spirit|40|7|15|1|Ruler of the Skeletons.
+Werewolf|Heavy|40|7|15|1|A human turned into a wolf by supernatural causes.

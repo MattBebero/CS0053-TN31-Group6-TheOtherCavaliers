@@ -1,0 +1,5 @@
+# Name|HP at LVL 1|Speed|Description
+Swordsman|35|40|The Swordsman uses its blade to defeat its foes. Mainly deals blunt damage.
+Ranger|30|50|The Ranger uses its bow and arrows to shoot down its foes with precision. Mainly deals piercing damage.
+Mage|40|35|The Mage uses its vast knowledge about magic to strike down its foes. Mainly deals mystic damage.
+Priest|50|30|The Priest uses its holy scriptures to heal its allies and provide useful support.
