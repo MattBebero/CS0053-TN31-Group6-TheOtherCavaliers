@@ -44,27 +44,26 @@ int chooseClass(const GameData& data, const std::string& name) {
 
 // Party setup for 1 to 3 players. Returns false if the player backed out.
 bool setupParty(const GameData& data, int count, RunState& run) {
+    const size_t players = static_cast<size_t>(count);
     std::vector<std::string> names;
-    std::vector<int> classes;
-    for (int i = 0; i < count;) {
-        if (static_cast<int>(names.size()) == i) names.push_back(readName(i + 1, names));
-        int c = chooseClass(data, names[static_cast<size_t>(i)]);
+    std::vector<size_t> classes;  // index into data.classes for each player
+    for (size_t i = 0; i < players;) {
+        if (names.size() == i) names.push_back(readName(static_cast<int>(i) + 1, names));
+        int c = chooseClass(data, names[i]);
         if (c < 0) {
             names.pop_back();  // Back returns to this player's name entry
             if (i == 0) return false;
             continue;
         }
-        if (static_cast<int>(classes.size()) > i)
-            classes[static_cast<size_t>(i)] = c;
+        if (classes.size() > i)
+            classes[i] = static_cast<size_t>(c);
         else
-            classes.push_back(c);
+            classes.push_back(static_cast<size_t>(c));
         ++i;
-        if (i == count) {
+        if (i == players) {
             std::cout << "\nParty Setup:\n";
-            for (int k = 0; k < count; ++k) {
-                std::cout << names[static_cast<size_t>(k)] << " - "
-                          << data.classes[static_cast<size_t>(classes[static_cast<size_t>(k)])].name
-                          << "\n";
+            for (size_t k = 0; k < players; ++k) {
+                std::cout << names[k] << " - " << data.classes[classes[k]].name << "\n";
             }
             std::cout << "Confirm?\n[Y/N]\n";
             if (!readYesNo()) {  // N: everybody picks a class again, names are kept
@@ -74,10 +73,9 @@ bool setupParty(const GameData& data, int count, RunState& run) {
         }
     }
     run = RunState();
-    for (int k = 0; k < count; ++k) {
+    for (size_t k = 0; k < players; ++k) {
         run.players.push_back(
-            makePlayer(data, names[static_cast<size_t>(k)],
-                       data.classes[static_cast<size_t>(classes[static_cast<size_t>(k)])], k));
+            makePlayer(data, names[k], data.classes[classes[k]], static_cast<int>(k)));
     }
     return true;
 }
