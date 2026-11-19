@@ -23,24 +23,10 @@ int randomPercent() { return static_cast<int>(rng()() % 100); }
 
 namespace {
 
-// Level after each cleared stage (stages 4, 6, 8 and 10 give no level up).
+// The level after clearing this stage (unchanged if the stage gives no level up).
 int levelAfterStage(int stage, int current) {
-    switch (stage) {
-        case 1:
-            return 2;
-        case 2:
-            return 3;
-        case 3:
-            return 4;
-        case 5:
-            return 5;
-        case 7:
-            return 6;
-        case 9:
-            return 7;
-        default:
-            return current;
-    }
+    auto entry = LEVEL_AFTER_STAGE.find(stage);
+    return entry == LEVEL_AFTER_STAGE.end() ? current : entry->second;
 }
 
 Unit makePlayer(const GameData& data, const std::string& name, const ClassInfo& info, int index) {
