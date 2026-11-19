@@ -426,7 +426,8 @@ int chooseTarget(const Move& mv, const Unit& actor, const std::vector<Unit>& pla
 Action chooseAction(const GameData& data, Unit& actor, int turn, int level,
                     const std::vector<Unit>& players, const std::vector<Unit>& enemies) {
     while (true) {
-        std::cout << "Turn " << turn << ": " << actor.name << "'s Turn.\n"
+        std::cout << "Turn " << turn << ": " << actor.name << "'s Turn. HP: " << actor.hp << "/"
+                  << actor.maxHp << ". MP: " << actor.mp << "/" << MAX_MP << "\n"
                   << "[1] Attack\n[2] Recharge\n[3] Move Info\n[4] Enemy Info\n";
         int choice = readInt(1, 4);
         if (choice == 2) {
@@ -451,7 +452,7 @@ Action chooseAction(const GameData& data, Unit& actor, int turn, int level,
         std::cout << "Choose a move:\n";
         for (size_t i = 0; i < usable.size(); ++i) {
             int cd = actor.cooldown.count(usable[i]->name) ? actor.cooldown.at(usable[i]->name) : 0;
-            std::cout << "[" << i + 1 << "] " << usable[i]->name;
+            std::cout << "[" << i + 1 << "] " << usable[i]->name << " (" << usable[i]->mp << " MP)";
             if (cd > 0) std::cout << " (Cooldown: " << cd << " turns)";
             std::cout << "\n";
         }
