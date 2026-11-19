@@ -512,10 +512,13 @@ void resolveAction(const Action& a, std::vector<Unit>& players, std::vector<Unit
     if (!actor.alive()) return;  // went down before its turn: the action is skipped
     if (!actor.isEnemy) {
         if (a.recharge) {
-            int gained = actor.mp < MAX_MP ? 1 : 0;  // excess MP is removed
-            actor.mp += gained;
-            std::cout << actor.name << " Recharged.\n"
-                      << actor.name << " gained " << gained << " MP.\n";
+            std::cout << actor.name << " Recharged.\n";
+            if (actor.mp >= MAX_MP) {
+                std::cout << actor.name << "'s MP is already full.\n";  // excess MP is removed
+            } else {
+                ++actor.mp;
+                std::cout << actor.name << " gained 1 MP.\n";
+            }
             return;
         }
         int target = a.target;
