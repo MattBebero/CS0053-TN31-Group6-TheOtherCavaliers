@@ -107,6 +107,15 @@ static Effect toEffect(const std::string& text) {
     return e;
 }
 
+// Like toInt, but the number must be 1 or more (HP, speed and levels).
+static int toPositiveInt(const std::string& text, const std::string& field) {
+    int value = toInt(text, field);
+    if (value < 1) {
+        throw std::invalid_argument(field + " must be 1 or more, got " + std::to_string(value));
+    }
+    return value;
+}
+
 static std::vector<std::string> splitLine(const std::string& line, size_t fieldCount) {
     std::vector<std::string> fields;
     std::stringstream parts(line);
@@ -146,16 +155,17 @@ static bool readFile(const std::string& path, Parser parseLine) {
 bool loadGameData(GameData& data, const std::string& folder) {
     bool ok = readFile(folder + "/classes.txt", [&](const std::string& line) {
         std::vector<std::string> f = splitLine(line, 4);
-        data.classes.push_back({f[0], toInt(f[1], "HP"), toInt(f[2], "Speed"), f[3]});
+        data.classes.push_back(
+            {f[0], toPositiveInt(f[1], "HP"), toPositiveInt(f[2], "Speed"), f[3]});
     });
     ok = ok && readFile(folder + "/enemies.txt", [&](const std::string& line) {
              std::vector<std::string> f = splitLine(line, 7);
              EnemyInfo e;
              e.name = f[0];
              e.type = toEnemyType(f[1]);
-             e.hp = toInt(f[2], "HP");
-             e.baseLevel = toInt(f[3], "Base level");
-             e.speed = toInt(f[4], "Speed");
+             e.hp = toPositiveInt(f[2], "HP");
+             e.baseLevel = toPositiveInt(f[3], "Base level");
+             e.speed = toPositiveInt(f[4], "Speed");
              e.boss = toInt(f[5], "Boss") == 1;
              e.description = f[6];
              data.enemies.push_back(e);
