@@ -9,6 +9,7 @@
 #include <cctype>
 #include <cstdlib>
 #include <iostream>
+#include <stdexcept>
 
 #include "Types.h"
 
@@ -32,6 +33,16 @@ std::string trim(const std::string& text) {
 std::string toLower(std::string text) {
     for (char& c : text) c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
     return text;
+}
+
+bool parseInt(const std::string& text, int& value) {
+    try {
+        size_t used = 0;
+        value = std::stoi(text, &used);
+        return used == text.size();  // "12abc" is rejected, not read as 12
+    } catch (const std::exception&) {
+        return false;  // empty, not a number, or out of int range
+    }
 }
 
 int readInt(int min, int max) {
