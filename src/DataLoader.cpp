@@ -35,14 +35,11 @@ std::vector<Move> GameData::movesOf(const std::string& owner) const {
 }
 
 static int toInt(const std::string& text, const std::string& field) {
-    try {
-        size_t used = 0;
-        int value = std::stoi(text, &used);
-        if (used != text.size()) throw std::invalid_argument("");
-        return value;
-    } catch (const std::exception&) {
+    int value = 0;
+    if (!parseInt(text, value)) {
         throw std::invalid_argument(field + " must be a whole number, got \"" + text + "\"");
     }
+    return value;
 }
 
 static DmgType toDmgType(const std::string& text) {
