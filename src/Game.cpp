@@ -89,7 +89,7 @@ void clearStage(RunState& run) {
         int gained = std::min(heal, p.maxHp - p.hp);
         p.hp += gained;
         std::cout << p.name << (wasDown ? " was revived and recovered " : " recovered ") << gained
-                  << " HP (HP: " << p.hp << "/" << p.maxHp << ")\n";
+                  << " HP (HP: " << p.hp << "/" << p.maxHp << ").\n";
     }
     int next = levelAfterStage(run.stage, run.level);
     if (next != run.level) {
