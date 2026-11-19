@@ -538,7 +538,7 @@ std::string describeMove(const Move& m) {
     const Effect& fx = m.effect;
     switch (m.target) {
         case Target::One:
-            text += "Hits 1 target. ";
+            text += m.power > 0 ? "Hits 1 target. " : "Targets 1 enemy. ";  // Taunt deals no damage
             break;
         case Target::All:
             text += "Hits all enemies. ";
