@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "Input.h"
+#include "Random.h"
 
 namespace {
 

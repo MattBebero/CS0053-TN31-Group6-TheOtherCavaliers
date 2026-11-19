@@ -3,7 +3,6 @@
 #pragma once
 
 #include <map>
-#include <random>
 #include <string>
 #include <vector>
 
@@ -91,6 +90,3 @@ struct RunState {
     int level = 1;
     std::vector<Unit> players;
 };
-
-std::mt19937& rng();
-int randomPercent();  // 0..99
