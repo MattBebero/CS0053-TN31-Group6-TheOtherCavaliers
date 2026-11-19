@@ -9,6 +9,10 @@
 std::string trim(const std::string& text);
 std::string toLower(std::string text);
 
+// Converts text such as "42" or "-3" to a whole number. Returns false if the
+// text is empty, has extra characters ("4O", "12 HP") or is too large.
+bool parseInt(const std::string& text, int& value);
+
 // Reads a whole number from min to max. Re-asks until the input is valid.
 int readInt(int min, int max);
 

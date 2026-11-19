@@ -37,9 +37,8 @@ bool saveRun(const RunState& run) {
 }
 
 static int toInt(const std::string& text) {
-    size_t used = 0;
-    int value = std::stoi(text, &used);
-    if (used != text.size()) throw std::invalid_argument("bad number");
+    int value = 0;
+    if (!parseInt(text, value)) throw std::invalid_argument("bad number");
     return value;
 }
 
