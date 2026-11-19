@@ -451,7 +451,7 @@ Action chooseAction(const GameData& data, Unit& actor, int turn, int level,
         std::cout << "Choose a move:\n";
         for (size_t i = 0; i < usable.size(); ++i) {
             int cd = actor.cooldown.count(usable[i]->name) ? actor.cooldown.at(usable[i]->name) : 0;
-            std::cout << "[" << i + 1 << "] " << usable[i]->name;
+            std::cout << "[" << i + 1 << "] " << usable[i]->name << " (" << usable[i]->mp << " MP)";
             if (cd > 0) std::cout << " (Cooldown: " << cd << " turns)";
             std::cout << "\n";
         }
