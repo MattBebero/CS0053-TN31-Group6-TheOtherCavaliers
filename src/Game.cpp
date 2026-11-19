@@ -51,8 +51,13 @@ bool setupParty(const GameData& data, int count, RunState& run) {
         if (names.size() == i) names.push_back(readName(static_cast<int>(i) + 1, names));
         int c = chooseClass(data, names[i]);
         if (c < 0) {
-            names.pop_back();  // Back returns to this player's name entry
-            if (i == 0) return false;
+            if (i == 0) return false;  // Player 1's Back returns to Select Play Mode
+            // Back returns to THIS player's name entry. The old code used pop_back(),
+            // which removed the LAST name: after "N" at Party Setup all names exist,
+            // so it deleted player 3's name instead of the current player's.
+            std::vector<std::string> others = names;
+            others.erase(others.begin() + static_cast<long>(i));  // other names stay taken
+            names[i] = readName(static_cast<int>(i) + 1, others);
             continue;
         }
         if (classes.size() > i)
