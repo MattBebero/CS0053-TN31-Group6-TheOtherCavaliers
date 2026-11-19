@@ -30,6 +30,10 @@ const std::vector<Weighted> LATE = {{"Slime", 30}, {"Wasp", 30}, {"Bandit", 40}}
 // Enemy HP multiplier (x10) for 1, 2 and 3 players.
 const int ENEMY_HP_MULT10[] = {10, 20, 30};
 
+// Cure and Heal All strength (percent) for 1, 2 and 3 players. One Priest heals
+// every ally, so heals are weaker in bigger parties to keep Priest parties fair.
+const int HEAL_SCALE_PERCENT[] = {100, 60, 40};
+
 std::string label(const Unit& u) { return u.isEnemy ? "Enemy " + u.name : u.name; }
 
 std::string hpText(const Unit& u) {
@@ -256,7 +260,7 @@ void dealDamage(Unit& actor, const Move& mv, std::vector<Unit*>& targets) {
 }
 
 void performMove(Unit& actor, const Move& mv, int targetIndex, std::vector<Unit>& players,
-                 std::vector<Unit>& enemies) {
+                 std::vector<Unit>& enemies, int partySize) {
     std::vector<Unit>& foes = actor.isEnemy ? players : enemies;
     std::vector<Unit>& friends = actor.isEnemy ? enemies : players;
 
@@ -315,7 +319,7 @@ void performMove(Unit& actor, const Move& mv, int targetIndex, std::vector<Unit>
         std::cout << t.name << "'s next damaging move will deal x1.25 DMG.\n";
     }
     if (fx.heal) {
-        int amount = mv.power;
+        int amount = mv.power * HEAL_SCALE_PERCENT[partySize - 1] / 100;  // rounded down
         std::vector<Unit*> targets;
         if (mv.target == Target::Allies) {
             for (Unit& f : friends) {
@@ -501,7 +505,8 @@ void endOfTurn(std::vector<Unit>& players, std::vector<Unit>& enemies) {
     for (Unit& e : enemies) tick(e);
 }
 
-void resolveAction(const Action& a, std::vector<Unit>& players, std::vector<Unit>& enemies) {
+void resolveAction(const Action& a, std::vector<Unit>& players, std::vector<Unit>& enemies,
+                   int partySize) {
     Unit& actor = *a.actor;
     if (!actor.alive()) return;  // went down before its turn: the action is skipped
     if (!actor.isEnemy) {
@@ -516,13 +521,13 @@ void resolveAction(const Action& a, std::vector<Unit>& players, std::vector<Unit
         bool targetsEnemy = a.move->target == Target::One || a.move->target == Target::Adjacent;
         if (targetsEnemy && !enemies[target].alive()) target = firstAlive(enemies);  // retarget
         if (target < 0) return;
-        performMove(actor, *a.move, target, players, enemies);
+        performMove(actor, *a.move, target, players, enemies, partySize);
         return;
     }
     const Move* mv = chooseEnemyMove(actor);
     if (mv == nullptr) return;
     int target = (mv->target == Target::Self) ? actor.index : chooseEnemyTarget(actor, players);
-    performMove(actor, *mv, target, players, enemies);
+    performMove(actor, *mv, target, players, enemies, partySize);
 }
 
 }  // namespace
@@ -618,7 +623,7 @@ bool playStage(const GameData& data, RunState& run, int partySize) {
         std::cout << "\n";
         for (const Action& a : actions) {
             if (!anyAlive(enemies) || !anyAlive(players)) break;
-            resolveAction(a, players, enemies);
+            resolveAction(a, players, enemies, partySize);
         }
         if (anyAlive(enemies) && anyAlive(players)) endOfTurn(players, enemies);
         if (!anyAlive(enemies)) return true;
