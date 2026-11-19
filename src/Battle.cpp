@@ -494,7 +494,10 @@ void endOfTurn(std::vector<Unit>& players, std::vector<Unit>& enemies) {
         if (u.burn > 0) --u.burn;
         if (u.bleed > 0) --u.bleed;
         if (u.lifesteal > 0) --u.lifesteal;
-        if (u.taunt > 0 && --u.taunt == 0) u.tauntedBy = -1;
+        if (u.taunt > 0) {
+            --u.taunt;
+            if (u.taunt == 0) u.tauntedBy = -1;  // Taunt ended: the enemy targets randomly again
+        }
     };
     for (Unit& p : players) tick(p);
     for (Unit& e : enemies) tick(e);
