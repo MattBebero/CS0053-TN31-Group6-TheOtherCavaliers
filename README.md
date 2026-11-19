@@ -1,4 +1,4 @@
-# Dungeons But No Dragons
+# Dungeons No Dragons
 
 A turn-based battle game for the console, written in C++17 for the CS0053 (TN31) final group project, Group 6
 "The Other Cavaliers". One to three players form a party, pick a class and fight through 10 stages that end in a boss.
@@ -32,83 +32,19 @@ Run these from this folder (the one with `src/` and `data/`), because the game r
 Windows (Command Prompt or PowerShell):
 
 ```
-g++ -std=c++17 -Wall -Wextra src\*.cpp -o battle_sim.exe
+g++ -std=c++17 src\*.cpp -o battle_sim.exe
 battle_sim.exe
 ```
 
 macOS / Linux:
 
 ```
-g++ -std=c++17 -Wall -Wextra src/*.cpp -o battle_sim
+g++ -std=c++17 src/*.cpp -o battle_sim
 ./battle_sim
 ```
 
 Optional: set the environment variable `DBND_SEED` to a number to get the same random enemies every run (used for tests).
 Test keystroke files are in `tests/`.
-
-## Sample input and output
-
-```
-Welcome to Dungeons But No Dragons!
-[1] Play
-[2] Continue
-[3] Tutorial
-[4] Run History
-[5] Exit
-> 1
-
-Select Play Mode
-[1] Single-player
-[2] Two-Player
-[3] Multiplayer (3-player)
-[4] Back
-> 1
-Enter player 1 name: Lee
-Welcome, Lee. Choose your class.
-[1] Swordsman
-[2] Ranger
-[3] Mage
-[4] Priest
-[5] Back
-> 3
-
-Party Setup:
-Lee - Mage
-Confirm?
-[Y/N]
-> y
-
-Stage 1/10
-Lee (LVL 1) has arrived!
-Enemy Slime (LVL 1) has appeared!
-
-Turn 1:
-Lee - HP: 40/40. MP: 1/6.
-Enemy Slime - HP: 8/8. MP: 1/6.
-
-Turn 1: Lee's Turn.
-[1] Attack
-[2] Recharge
-[3] Move Info
-[4] Enemy Info
-> 1
-Choose a move:
-[1] Water Ball
-[2] Fire Pillar
-[3] Mana Focus
-[4] Back
-> 1
-
-Lee used Water Ball.
-Super effective!
-Lee dealt 8 DMG on Enemy Slime (HP: 0/8).
-Enemy Slime has been defeated.
-
-Stage 1/10 cleared.
-Lee recovered 11 HP (HP: 40/40)
-Lee leveled up to LVL 2! Lee gained 3 MAX HP.
-Move to next stage? (Y/N)
-```
 
 ## Files
 
