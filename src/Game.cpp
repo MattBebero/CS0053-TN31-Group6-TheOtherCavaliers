@@ -8,39 +8,15 @@
 
 #include "Battle.h"
 #include "Input.h"
+#include "Random.h"
 #include "SaveManager.h"
-
-std::mt19937& rng() {
-    static std::mt19937 engine([] {
-        const char* seed = std::getenv("DBND_SEED");  // fixed seed makes tests repeatable
-        if (seed != nullptr) return static_cast<std::mt19937::result_type>(std::atoi(seed));
-        return static_cast<std::mt19937::result_type>(std::random_device{}());
-    }());
-    return engine;
-}
-
-int randomPercent() { return static_cast<int>(rng()() % 100); }
 
 namespace {
 
-// Level after each cleared stage (stages 4, 6, 8 and 10 give no level up).
+// The level after clearing this stage (unchanged if the stage gives no level up).
 int levelAfterStage(int stage, int current) {
-    switch (stage) {
-        case 1:
-            return 2;
-        case 2:
-            return 3;
-        case 3:
-            return 4;
-        case 5:
-            return 5;
-        case 7:
-            return 6;
-        case 9:
-            return 7;
-        default:
-            return current;
-    }
+    auto entry = LEVEL_AFTER_STAGE.find(stage);
+    return entry == LEVEL_AFTER_STAGE.end() ? current : entry->second;
 }
 
 Unit makePlayer(const GameData& data, const std::string& name, const ClassInfo& info, int index) {
@@ -68,27 +44,26 @@ int chooseClass(const GameData& data, const std::string& name) {
 
 // Party setup for 1 to 3 players. Returns false if the player backed out.
 bool setupParty(const GameData& data, int count, RunState& run) {
+    const size_t players = static_cast<size_t>(count);
     std::vector<std::string> names;
-    std::vector<int> classes;
-    for (int i = 0; i < count;) {
-        if (static_cast<int>(names.size()) == i) names.push_back(readName(i + 1, names));
-        int c = chooseClass(data, names[static_cast<size_t>(i)]);
+    std::vector<size_t> classes;  // index into data.classes for each player
+    for (size_t i = 0; i < players;) {
+        if (names.size() == i) names.push_back(readName(static_cast<int>(i) + 1, names));
+        int c = chooseClass(data, names[i]);
         if (c < 0) {
             names.pop_back();  // Back returns to this player's name entry
             if (i == 0) return false;
             continue;
         }
-        if (static_cast<int>(classes.size()) > i)
-            classes[static_cast<size_t>(i)] = c;
+        if (classes.size() > i)
+            classes[i] = static_cast<size_t>(c);
         else
-            classes.push_back(c);
+            classes.push_back(static_cast<size_t>(c));
         ++i;
-        if (i == count) {
+        if (i == players) {
             std::cout << "\nParty Setup:\n";
-            for (int k = 0; k < count; ++k) {
-                std::cout << names[static_cast<size_t>(k)] << " - "
-                          << data.classes[static_cast<size_t>(classes[static_cast<size_t>(k)])].name
-                          << "\n";
+            for (size_t k = 0; k < players; ++k) {
+                std::cout << names[k] << " - " << data.classes[classes[k]].name << "\n";
             }
             std::cout << "Confirm?\n[Y/N]\n";
             if (!readYesNo()) {  // N: everybody picks a class again, names are kept
@@ -98,10 +73,9 @@ bool setupParty(const GameData& data, int count, RunState& run) {
         }
     }
     run = RunState();
-    for (int k = 0; k < count; ++k) {
+    for (size_t k = 0; k < players; ++k) {
         run.players.push_back(
-            makePlayer(data, names[static_cast<size_t>(k)],
-                       data.classes[static_cast<size_t>(classes[static_cast<size_t>(k)])], k));
+            makePlayer(data, names[k], data.classes[classes[k]], static_cast<int>(k)));
     }
     return true;
 }

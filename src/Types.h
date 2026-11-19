@@ -3,7 +3,6 @@
 #pragma once
 
 #include <map>
-#include <random>
 #include <string>
 #include <vector>
 
@@ -19,6 +18,9 @@ const int STAGE_HEAL_PERCENT = 10;   // of max HP
 const int HIGHER_COUNT_CHANCE = 40;  // % chance of one extra enemy
 const int MAX_NAME_LENGTH = 16;
 const int NEW_MOVE_LEVEL = 5;  // level at which the 4th move is learned
+
+// Stage cleared -> new level. Stages 4, 6, 8 and 10 give no level up.
+const std::map<int, int> LEVEL_AFTER_STAGE = {{1, 2}, {2, 3}, {3, 4}, {5, 5}, {7, 6}, {9, 7}};
 
 enum class DmgType { None, Blunt, Piercing, Mystic };
 enum class EnemyType { Solid, Heavy, Spirit };
@@ -88,6 +90,3 @@ struct RunState {
     int level = 1;
     std::vector<Unit> players;
 };
-
-std::mt19937& rng();
-int randomPercent();  // 0..99
