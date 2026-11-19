@@ -503,8 +503,7 @@ void endOfTurn(std::vector<Unit>& players, std::vector<Unit>& enemies) {
     for (Unit& e : enemies) tick(e);
 }
 
-void resolveAction(const Action& a, std::vector<Unit>& players, std::vector<Unit>& enemies,
-                   int level) {
+void resolveAction(const Action& a, std::vector<Unit>& players, std::vector<Unit>& enemies) {
     Unit& actor = *a.actor;
     if (!actor.alive()) return;  // went down before its turn: the action is skipped
     if (!actor.isEnemy) {
@@ -526,7 +525,6 @@ void resolveAction(const Action& a, std::vector<Unit>& players, std::vector<Unit
     if (mv == nullptr) return;
     int target = (mv->target == Target::Self) ? actor.index : chooseEnemyTarget(actor, players);
     performMove(actor, *mv, target, players, enemies);
-    (void)level;
 }
 
 }  // namespace
@@ -622,7 +620,7 @@ bool playStage(const GameData& data, RunState& run, int partySize) {
         std::cout << "\n";
         for (const Action& a : actions) {
             if (!anyAlive(enemies) || !anyAlive(players)) break;
-            resolveAction(a, players, enemies, run.level);
+            resolveAction(a, players, enemies);
         }
         if (anyAlive(enemies) && anyAlive(players)) endOfTurn(players, enemies);
         if (!anyAlive(enemies)) return true;
