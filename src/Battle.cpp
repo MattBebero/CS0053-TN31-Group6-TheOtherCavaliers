@@ -126,18 +126,16 @@ int countAlive(const std::vector<Unit>& group) {
 
 // ---------------------------------------------------------------- spawning
 
-int pickWeighted(const std::vector<Weighted>& table, int& outIndex) {
+// Returns the index of the enemy picked from a table of percent chances.
+int pickWeighted(const std::vector<Weighted>& table) {
     int roll = randomPercent();
     int total = 0;
     for (size_t i = 0; i < table.size(); ++i) {
         total += table[i].weight;
-        if (roll < total) {
-            outIndex = static_cast<int>(i);
-            return outIndex;
-        }
+        if (roll < total) return static_cast<int>(i);
     }
-    outIndex = static_cast<int>(table.size()) - 1;
-    return outIndex;
+    return static_cast<int>(table.size()) -
+           1;  // only reached if the chances add up to less than 100
 }
 
 Unit makeEnemy(const GameData& data, const std::string& kind, int level, int partySize) {
@@ -168,8 +166,7 @@ std::vector<Unit> spawnEnemies(const GameData& data, int stage, int level, int p
         const std::vector<Weighted>& table = stage <= 3 ? EARLY : (stage <= 6 ? MIDDLE : LATE);
         int count = partySize + (randomPercent() < HIGHER_COUNT_CHANCE ? 1 : 0);
         for (int i = 0; i < count; ++i) {
-            int pick = 0;
-            pickWeighted(table, pick);
+            int pick = pickWeighted(table);
             enemies.push_back(makeEnemy(data, table[pick].name, level, partySize));
         }
         // Same-name enemies get numbers: Slime 1, Slime 2.
